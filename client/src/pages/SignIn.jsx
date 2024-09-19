@@ -1,55 +1,49 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice';
 
 const SignIn = () => {
-    const [formData, setFormData] = useState({});
-    const [error, setError] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-    const handleChange = (e) => {
-      setFormData({ ...formData, [e.target.id]: e.target.value });
+  const [formData, setFormData] = useState({});
+  const { loading, error } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(loginStart());
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to fetch');
+      }
+
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(loginFailure(data.message));
+        return;
+      }
+
+      dispatch(loginSuccess(data));
+      navigate('/');
+    } catch (error) {
+      dispatch(loginFailure(error.message));
+      console.error('Sign In Error:', error);
     }
+  };
 
-    // console.log(formData);
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-          setLoading(true);
-          setError(false);
-
-          console.log(formData);
-    
-          // Ensure formData contains the expected properties
-          const res = await fetch('/api/auth/signin', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-          });
-    
-          if (!res.ok) {
-            throw new Error('Failed to fetch');
-          }
-    
-          const data = await res.json();
-          console.log(data);
-          setLoading(false);
-    
-          if (data.success === false) {
-            setError(true);
-            return;
-          }
-    
-          navigate('/');
-        } catch (error) {
-          setLoading(false);
-          setError(true);
-          console.error('Sign In Error:', error);
-        }
-    };
-    
-       
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
@@ -74,7 +68,6 @@ const SignIn = () => {
         >
           {loading ? 'Loading...' : 'Sign In'}
         </button>
-        {/* <OAuth /> */}
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Dont Have an account?</p>
@@ -83,10 +76,10 @@ const SignIn = () => {
         </Link>
       </div>
       <p className='text-red-700 mt-5'>
-        {error ? error.message || 'Something went wrong!' : ''}
+        {error ? error : 'Sometihing went wrong'}  {/* Properly display the error */}
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;
