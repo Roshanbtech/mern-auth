@@ -34,9 +34,11 @@ const signIn = async (req, res, next) => {
     const { userPassword: hashedPassword, ...others } = validUser._doc;
     const expiryDate = new Date(Date.now() + 3600000); // 1 hour
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .cookie("access_token", token, 
+        { httpOnly: true,
+         expires: expiryDate })
       .status(200)
-      .json({ others });
+      .json({'message': 'Logged in successfully', ...others});
   } catch (error) {
     next(error);
   }
