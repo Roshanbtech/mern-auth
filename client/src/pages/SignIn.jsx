@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice';
+import OAuth from '../components/OAuth';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -45,39 +46,46 @@ const SignIn = () => {
   };
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input
-          type='email'
-          placeholder='Email'
-          id='userEmail'
-          className='bg-slate-100 p-3 rounded-lg'
-          onChange={handleChange}
-        />
-        <input
-          type='password'
-          placeholder='Password'
-          id='userPassword'
-          className='bg-slate-100 p-3 rounded-lg'
-          onChange={handleChange}
-        />
-        <button
-          disabled={loading}
-          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
-        >
-          {loading ? 'Loading...' : 'Sign In'}
-        </button>
-      </form>
-      <div className='flex gap-2 mt-5'>
-        <p>Dont Have an account?</p>
-        <Link to='/signup'>
-          <span className='text-blue-500'>Sign up</span>
-        </Link>
+    <div className="bg-gradient-to-r from-black to-gray-800 min-h-screen flex items-center justify-center pt-24">
+      {/* Padding top (pt-24) to avoid overlap with the fixed header */}
+      <div className="p-8 max-w-lg w-full bg-gray-900 rounded-lg shadow-lg">
+        <h1 className="text-3xl text-center font-semibold text-blue-400 mb-6">Sign In</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="email"
+            placeholder="Email"
+            id="userEmail"
+            className="bg-gray-700 text-white p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+            onChange={handleChange}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            id="userPassword"
+            className="bg-gray-700 text-white p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+            onChange={handleChange}
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="bg-gradient-to-r from-blue-500 to-white-400 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 transition duration-300"
+          >
+            {loading ? 'Loading...' : 'Sign In'}
+          </button>
+          <OAuth />
+        </form>
+        <div className="flex gap-2 mt-5 justify-center">
+          <p className="text-gray-300">Don't have an account?</p>
+          <Link to="/signup">
+            <span className="text-blue-500 hover:underline">Sign up</span>
+          </Link>
+        </div>
+        {error && (
+          <p className="text-red-700 mt-5 text-center">
+            {error}
+          </p>
+        )}
       </div>
-      <p className='text-red-700 mt-5'>
-        {error ? error : 'Sometihing went wrong'}  {/* Properly display the error */}
-      </p>
     </div>
   );
 };

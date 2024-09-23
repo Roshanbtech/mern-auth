@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
     userPassword:{
         type: String,
         required: true
+    },
+    userProfilePic:{
+        type: String,
+        default: "https://img.icons8.com/?size=100&id=ScJCfhkd77yD&format=png&color=000000"
     }
 
     },{timestamps: true}); 
