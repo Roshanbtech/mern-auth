@@ -1,0 +1,69 @@
+/* Default styling for the text */
+.bubble-letter {
+    transition: 0.35s font-weight, 0.35s color;
+    font-weight: 400;
+    color: rgb(199, 210, 254); /* Default color */
+  }
+  
+  /* Define the keyframes for the color animation */
+  @keyframes colorChange {
+    0% {
+      color: #ff6ec7;
+    }
+    25% {
+      color: #1E90FF;
+    }
+    50% {
+      color: #00FF00;
+    }
+    75% {
+      color: #FFD700;
+    }
+    100% {
+      color: #FF4500;
+    }
+  }
+  
+  /* Hover effect for the hovered text with color change */
+  .bubble-letter:hover {
+    font-weight: 900;
+    animation: colorChange 2s infinite; /* Color-changing animation */
+  }
+  
+  /* Styling for the next sibling after hovered */
+  .bubble-letter:hover + .bubble-letter {
+    font-weight: 500;
+    animation: colorChange 2s infinite;
+  }
+  
+  /* Styling for the second sibling after hovered */
+  .bubble-letter:hover + .bubble-letter + .bubble-letter {
+    font-weight: 300;
+    animation: colorChange 2s infinite;
+  }
+  
+  /* General sibling hover effect (for all subsequent siblings) */
+  .bubble-letter:hover ~ .bubble-letter {
+    font-weight: 500;
+    animation: colorChange 2s infinite;
+  }
+  
+  .bubble-letter {
+    display: inline-block;
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+  
+  .bubble-letter:hover {
+    transform: scale(1.2) rotate(5deg);
+    color: hsl(calc(360 * var(--i)), 100%, 70%);
+  }
+  
+  /* Optional: Additional style for letters */
+  .bubble-text {
+    line-height: 1.6;
+    font-size: 1rem; /* Adjust this size to match your p tag font size */
+    font-weight: 400; /* Adjust based on your design */
+    color: #e2e8f0; /* Default text color */
+  }
+  
+  
