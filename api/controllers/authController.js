@@ -8,6 +8,7 @@ const signUp = async (req, res, next) => {
   try {
     const { userName, userEmail, userPassword } = req.body;
     const hashedPassword = await bcryptjs.hash(userPassword, 10);
+    console.log(hashedPassword);
     const newUser = new User({
       userName,
       userEmail,
@@ -17,6 +18,7 @@ const signUp = async (req, res, next) => {
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     next(error);
+    console.log(error);
   }
 };
 
@@ -37,6 +39,7 @@ const signIn = async (req, res, next) => {
       .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
       .status(200)
       .json({ message: "Logged in successfully", ...others });
+      console.log('jwt token: ', token);
   } catch (error) {
     next(error);
   }
@@ -80,11 +83,11 @@ const google = async (req, res, next) => {
   }
 };
 
-const logout = (req, res) => {
+const signOut = (req, res) => {
   res
-    .clearCookie("access_token", { sameSite: "none", secure: true })
+    .clearCookie("access_token")
     .status(200)
     .json({ message: "Logged out successfully" });
 };
 
-export { signUp, signIn, google };
+export { signUp, signIn, google, signOut };

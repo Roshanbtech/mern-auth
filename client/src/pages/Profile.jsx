@@ -6,7 +6,15 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { updateUserStart, updateUserSuccess, updateUserFailure} from "../redux/user/userSlice";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserFailure,
+  signOut,
+} from "../redux/user/userSlice";
 import { app } from "../firebase";
 import Button from "../components/Button";
 import BubbleText from "../components/BubbleText";
@@ -64,34 +72,62 @@ const Profile = () => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
-    })
-  }
+    });
+  };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
+    try {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
-      })
-      const data = await res.json()
-      console.log(data)   
-      if(data.success === false) {
-        dispatch(updateUserFailure(data.message))
-        return
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
       }
-      dispatch(updateUserSuccess(data))
-      setUpdateSuccess(true)
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
     } catch (error) {
-      console.log(error)
-      dispatch(updateUserFailure(error.message))
+      console.log(error);
+      dispatch(updateUserFailure(error.message));
     }
-  }
+  };
 
+  const handleDelete = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.success === false) {
+        dispatch(deleteUserFailure(data.message));
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+      handleSignOut();
+    } catch (error) {
+      console.log(error);
+      dispatch(deleteUserFailure(error.message));
+    }
+  };
+
+  const handleSignOut = async() => {
+   try{
+    await fetch('/api/auth/signout');
+    dispatch(signOut());
+   }catch(error){
+    console.log(error);
+   }
+  };
   return (
     <div className="bg-gradient-to-r from-black to-gray-800 min-h-screen flex items-center justify-center pt-24">
       <div className="p-4 max-w-xs w-full bg-gray-900 rounded-lg shadow-lg">
@@ -119,7 +155,6 @@ const Profile = () => {
               <p className="text-blue-400">{imagePercent}% uploading...</p>
             ) : imagePercent === 100 ? (
               <p className="text-green-500">Image uploaded successfully</p>
-
             ) : null}
           </div>
 
@@ -128,7 +163,9 @@ const Profile = () => {
               icon={faHandPeace}
               className="text-blue-400 mr-1 size-6"
             />
-            <BubbleText text={`${currentUser?.userName.toUpperCase() || "User"}`} />
+            <BubbleText
+              text={`${currentUser?.userName.toUpperCase() || "User"}`}
+            />
           </div>
 
           <input
@@ -147,7 +184,7 @@ const Profile = () => {
             placeholder="Email"
             className="bg-gray-700 text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
             onChange={handleChange}
-         />
+          />
 
           <input
             type="password"
@@ -155,24 +192,30 @@ const Profile = () => {
             placeholder="Password"
             className="bg-gray-700 text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
             onChange={handleChange}
-         />
+          />
 
-          <Button text = {loading? "Loading..." : "Update Profile"} 
+          <Button
+            text={loading ? "Loading..." : "Update Profile"}
             className="bg-gradient-to-r from-blue-500 to-white-400 text-white p-2 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 transition duration-300"
           />
         </form>
 
         <div className="flex justify-between mt-2">
-          <span className="text-red-700 cursor-pointer hover:underline">
+          <span
+            onClick={handleDelete}
+            className="text-red-700 cursor-pointer hover:underline"
+          >
             Delete Account
           </span>
-          <span className="text-red-700 cursor-pointer hover:underline">
+          <span onClick={handleSignOut} className="text-red-700 cursor-pointer hover:underline">
             Sign out
           </span>
         </div>
 
         <p className="text-red-700 mt-2">{error && "Something went wrong"}</p>
-        <p className="text-green-700 mt-2">{updateSuccess && "Profile updated successfully"}</p>
+        <p className="text-green-700 mt-2">
+          {updateSuccess && "Profile updated successfully"}
+        </p>
       </div>
     </div>
   );

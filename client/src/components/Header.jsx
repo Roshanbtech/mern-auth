@@ -8,7 +8,7 @@ const Header = () => {
   return (
     <div className="bg-gradient-to-r from-black to-gray-900 shadow-lg fixed top-0 left-0 right-0 z-10">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-5">
-        <Link to="/">
+        <Link to={currentUser ? "/" : "/signin"}>
           <h1 className="text-3xl font-bold text-blue-400 tracking-wide">
             R-Auth
           </h1>
@@ -16,7 +16,7 @@ const Header = () => {
         <ul className="flex gap-8 text-lg">
           <li>
             <Link
-              to="/"
+              to={currentUser ? '/' : '/signin'}
               className="text-gray-300 hover:text-blue-400 transition duration-300"
             >
               Home
@@ -24,7 +24,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              to="/about"
+              to={currentUser ? "/about" : "/signin"}
               className="text-gray-300 hover:text-blue-400 transition duration-300"
             >
               About
