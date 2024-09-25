@@ -20,7 +20,8 @@ const Profile = () => {
   const [imagePercent, setImagePercent] = useState(0);
   const [imageError, setImageError] = useState(false);
   const [formData, setFormData] = useState({});
-  const { currentUser } = useSelector((state) => state.user);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (image) {
@@ -58,6 +59,22 @@ const Profile = () => {
     );
   };
 
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    try{
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="bg-gradient-to-r from-black to-gray-800 min-h-screen flex items-center justify-center pt-24">
       <div className="p-4 max-w-xs w-full bg-gray-900 rounded-lg shadow-lg">
@@ -92,9 +109,9 @@ const Profile = () => {
           <div className="text-center mt-2 flex items-center justify-center">
             <FontAwesomeIcon
               icon={faHandPeace}
-              className="text-blue-400 mr-1"
+              className="text-blue-400 mr-1 size-6"
             />
-            <BubbleText text={`${currentUser?.userName || "User"}`} />
+            <BubbleText text={`${currentUser?.userName.toUpperCase() || "User"}`} />
           </div>
 
           <input
@@ -102,6 +119,7 @@ const Profile = () => {
             id="userName"
             placeholder="Username"
             className="bg-gray-700 text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+            onChange={handleChange}
           />
 
           <input
@@ -109,17 +127,18 @@ const Profile = () => {
             id="userEmail"
             placeholder="Email"
             className="bg-gray-700 text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-          />
+            onChange={handleChange}
+         />
 
           <input
             type="password"
             id="userPassword"
             placeholder="Password"
             className="bg-gray-700 text-white p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-          />
+            onChange={handleChange}
+         />
 
-          <Button
-            text="Update Profile"
+          <Button text = {loading? "Loading..." : "Update Profile"} 
             className="bg-gradient-to-r from-blue-500 to-white-400 text-white p-2 rounded-lg uppercase hover:opacity-95 disabled:opacity-80 transition duration-300"
           />
         </form>
@@ -133,7 +152,7 @@ const Profile = () => {
           </span>
         </div>
 
-        <p className="text-red-700 mt-2">{/* Error message */}</p>
+        <p className="text-red-700 mt-2">{error && "Something went wrong"}</p>
         <p className="text-green-700 mt-2">{/* Success message */}</p>
       </div>
     </div>

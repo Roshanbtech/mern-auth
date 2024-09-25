@@ -1,7 +1,7 @@
 // import express from "express";
 import User from "../models/userModel.js";
 import bcryptjs from "bcryptjs";
-import { errorHandler } from "../utils/error.js";
+import errorHandler from "../utils/error.js"; // Correct import
 import jwt from "jsonwebtoken";
 
 const signUp = async (req, res, next) => {
