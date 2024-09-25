@@ -6,6 +6,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { updateUserStart, updateUserSuccess, updateUserFailure} from "../redux/user/userSlice";
 import { app } from "../firebase";
 import Button from "../components/Button";
 import BubbleText from "../components/BubbleText";
@@ -62,16 +63,32 @@ const Profile = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.id]: e.target.value,
     })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     try{
-      
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      const data = await res.json()
+      console.log(data)   
+      if(data.success === false) {
+        dispatch(updateUserFailure(data.message))
+        return
+      }
+      dispatch(updateUserSuccess(data))
+      setUpdateSuccess(true)
     } catch (error) {
       console.log(error)
+      dispatch(updateUserFailure(error.message))
     }
   }
 
@@ -81,7 +98,7 @@ const Profile = () => {
         <h1 className="text-xl font-semibold text-center text-blue-400 mb-4">
           Profile
         </h1>
-        <form className="flex flex-col gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <input
             type="file"
             ref={fileRef}
@@ -115,6 +132,7 @@ const Profile = () => {
           </div>
 
           <input
+            defaultValue={currentUser?.userName}
             type="text"
             id="userName"
             placeholder="Username"
@@ -123,6 +141,7 @@ const Profile = () => {
           />
 
           <input
+            defaultValue={currentUser?.userEmail}
             type="email"
             id="userEmail"
             placeholder="Email"
@@ -153,7 +172,7 @@ const Profile = () => {
         </div>
 
         <p className="text-red-700 mt-2">{error && "Something went wrong"}</p>
-        <p className="text-green-700 mt-2">{/* Success message */}</p>
+        <p className="text-green-700 mt-2">{updateSuccess && "Profile updated successfully"}</p>
       </div>
     </div>
   );
