@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import Header from "../components/Header";
 const SignUp = () => {
   const [formData, setFormData] = useState({});
   const [error, setError] = useState(false);
@@ -37,6 +37,8 @@ const SignUp = () => {
   };
 
   return (
+    <>
+    <Header />
     <div className="bg-gradient-to-r from-black to-gray-800 min-h-screen flex items-center justify-center pt-24">
       {/* Padding top (pt-24) to avoid overlap with the fixed header */}
       <div className="p-6 max-w-lg w-full bg-gray-900 rounded-lg shadow-lg">
@@ -79,6 +81,7 @@ const SignUp = () => {
         <p className='text-red-700 mt-5 text-center'>{error && 'Something went wrong!'}</p>
       </div>
     </div>
+    </>
   );
 };
 

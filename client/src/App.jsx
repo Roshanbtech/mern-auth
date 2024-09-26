@@ -8,11 +8,19 @@ import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
+import AdminHome from "./pages/Admin/AdminHome";
+import AddUser from "./pages/Admin/AddUser";
+import EditUser from "./pages/Admin/EditUser";
+import Login from "./pages/Admin/Login";
+import AdminPrivateRoute from "./components/AdminPrivateRoute";
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Header />
+      {/* <ToastContainer /> */}
+      {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -21,6 +29,15 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
+      </Routes>
+
+      <Routes>
+        <Route path="/admin" element={<Login />} />
+        <Route element={<AdminPrivateRoute />}>
+          <Route path="/admin/home" element={<AdminHome />} />
+          <Route path="/admin/edit/:id" element={<EditUser />} />
+        </Route>
+        <Route path="/admin/addUser" element={<AddUser />} />
       </Routes>
     </BrowserRouter>
   );

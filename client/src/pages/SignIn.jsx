@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
+import Header from '../components/Header';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -46,6 +47,8 @@ const SignIn = () => {
   };
 
   return (
+    <>
+      <Header />
     <div className="bg-gradient-to-r from-black to-gray-800 min-h-screen flex items-center justify-center pt-24">
       {/* Padding top (pt-24) to avoid overlap with the fixed header */}
       <div className="p-8 max-w-lg w-full bg-gray-900 rounded-lg shadow-lg">
@@ -87,6 +90,7 @@ const SignIn = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

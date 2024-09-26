@@ -21,7 +21,7 @@ import BubbleText from "../components/BubbleText";
 // Import FontAwesomeIcon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandPeace } from "@fortawesome/free-solid-svg-icons";
-
+import Header from "../components/Header";
 const Profile = () => {
   const dispatch = useDispatch();
   const fileRef = useRef(null);
@@ -129,6 +129,8 @@ const Profile = () => {
    }
   };
   return (
+    <>
+      <Header />
     <div className="bg-gradient-to-r from-black to-gray-800 min-h-screen flex items-center justify-center pt-24">
       <div className="p-4 max-w-xs w-full bg-gray-900 rounded-lg shadow-lg">
         <h1 className="text-xl font-semibold text-center text-blue-400 mb-4">
@@ -218,6 +220,7 @@ const Profile = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

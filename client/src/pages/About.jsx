@@ -1,8 +1,10 @@
 import React from 'react';
 import BubbleText from '../components/BubbleText';
-
+import Header from '../components/Header.jsx';
 export default function About() {
   return (
+    <>
+      <Header />
     <div className='bg-gradient-to-r from-black to-gray-800 min-h-screen flex items-center justify-center py-12'>
       {/* Centered layout with background theme */}
       <div className='px-6 py-8 max-w-2xl w-full bg-gray-900 rounded-lg shadow-lg'>
@@ -25,5 +27,6 @@ export default function About() {
         </p>
       </div>
     </div>
+    </>
   );
 }
