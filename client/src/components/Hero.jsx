@@ -6,6 +6,7 @@ import { Canvas } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
 import BubbleText from "./BubbleText"; // Import BubbleText component
 
+
 const COLORS_TOP = ["#13FFAA", "#1E67C6", "#CE84CF", "#DD335C"];
 
 const Hero = () => {

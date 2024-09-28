@@ -89,7 +89,7 @@ const userEdit = async (req, res) => {
     const { userName, userEmail } = req.body;
     const editedUser = await User.findByIdAndUpdate(id, {
       $set: { userName: userName, userEmail: userEmail },
-    });
+    }, { new: true });
     console.log(`Edited user: ${editedUser}`);
     res.status(200).json(editedUser);
   } catch (error) {
