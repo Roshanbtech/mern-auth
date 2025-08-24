@@ -33,9 +33,7 @@ app.set("trust proxy", 1);
 const allowed = [
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://*.vercel.app",
-  "https://your-frontend-domain.com",
-  "https://www.your-frontend-domain.com",
+  "https://mern-auth-drab.vercel.app",
 ];
 
 app.use(
