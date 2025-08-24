@@ -84,6 +84,7 @@ const Profile = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
       const data = await res.json();
@@ -105,6 +106,10 @@ const Profile = () => {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: "DELETE",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
       const data = await res.json();
       console.log(data);
@@ -122,7 +127,10 @@ const Profile = () => {
 
   const handleSignOut = async() => {
    try{
-    await fetch('/api/auth/signout');
+    await fetch('/api/auth/signout', {
+      method: 'POST',
+      credentials: 'include',
+    });
     dispatch(signOut());
    }catch(error){
     console.log(error);

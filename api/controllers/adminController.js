@@ -5,25 +5,29 @@ import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
 const adminLogin = async (req, res, next) => {
-  const { userName, userPassword } = req.body; 
+  const { userName, userPassword } = req.body;
   try {
     const admin = await Admin.findOne({ userName });
-    console.log(admin);
     if (!admin) return next(errorHandler(404, "User not found"));
 
-    // Fix: Password verification should use the hashed password
-   if(userPassword !== admin.userPassword) return next(errorHandler(401, "Wrong credentials"))
+    const ok = await bcryptjs.compare(userPassword, admin.userPassword);
+    if (!ok) return next(errorHandler(401, "Wrong credentials"));
 
     const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET);
-    const { userPassword: _, ...others } = admin._doc;
-    const expiryDate = new Date(Date.now() + 3600000); // 1 hour
+    const { userPassword: _pwd, ...others } = admin._doc;
+    const expiryDate = new Date(Date.now() + 3600000);
+
     res
-      .cookie("access_token", token, { httpOnly: true, expires: expiryDate })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+        expires: expiryDate,
+      })
       .status(200)
       .json({ message: "Logged in successfully", ...others });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 };
 

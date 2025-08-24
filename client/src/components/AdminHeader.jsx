@@ -10,7 +10,10 @@ export default function AdminHeader(){
 
     const handleLogOut = async () => {
       try {
-          await fetch('/api/admin/logout');
+          await fetch('/api/admin/logout', {
+            method: 'POST',
+            credentials: 'include',
+          });
           dispatch(adminLogout());
           navigate('/admin');
           toast.success('Sign Out Successful', {
